@@ -1,0 +1,21 @@
+{%extends "layout.html"%}
+{%block body%}
+  <h1>Retrospective Activity</h1>
+  <div>
+    <p>Start a retrospective</p>
+    <form action="{{url_for("newRetrospective")}}" method="post">
+      <label for="name">Retrospective Name:</label>
+      <input type="text" name="name" id="name"/>
+      <input type="submit" value="Start"/>
+    </form> 
+    <p>Or join an existing retrospective</p>
+    <form action="{{url_for("join")}}" method="post">
+      <select name="name" >
+        {% for r in retrospectives %}
+          <option value="{{r}}">{{r}}</option>
+        {% endfor %}
+      <input type="submit" value="join"/>
+      </select>
+    </form> 
+  </div>
+{%endblock%}
