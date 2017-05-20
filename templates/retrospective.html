@@ -3,7 +3,7 @@
   <h1>Retrospective Activity: {{this.name}}</h1>
   <div>
     {% for t in this.COMMENT_TYPES %}
-      <h2>{{t}}</h2>
+      <img src="/static/{{t}}.svg"/>
       {% for comment in this.comments[t] %}
         <p>{{comment}}</p>
       {% endfor %} 
