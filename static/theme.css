@@ -1,0 +1,73 @@
+.retrospective {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; 
+  right: 0;
+}
+
+.retrospective .good {
+  background-color: #CCFFCC;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 50%; 
+  right: 50%;
+}
+
+.retrospective .bad {
+  background-color: #FFCCCC;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  bottom: 50%; 
+  right: 0;
+}
+
+.retrospective .suggestion {
+  background-color: #CCCCFF;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  bottom: 0; 
+  right: 50%;
+}
+
+.retrospective .thanks {
+  background-color: #FFFFCC;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  bottom: 0; 
+  right: 0;
+}
+
+.retrospective img {
+  display: inline-block;
+  max-width: 30%;
+}
+
+.retrospective p {
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  font-family: sans-serif;
+  margin: 1%;
+  padding: 1%;
+  width: 25%;
+  height: 25%;
+  overflow: auto;
+} 
+
+.retrospective .good p {
+  background-color: #66FF66;
+}
+.retrospective .bad p {
+  background-color: #FF6666;
+}
+.retrospective .suggestion p {
+  background-color: #6666FF;
+}
+.retrospective .thanks p {
+  background-color: #FFFF66;
+}

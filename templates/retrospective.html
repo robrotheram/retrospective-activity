@@ -1,12 +1,14 @@
 {%extends "layout.html"%}
 {%block body%}
   <h1>Retrospective Activity: {{this.name}}</h1>
-  <div>
+  <div class="retrospective">
     {% for t in this.COMMENT_TYPES %}
-      <img src="/static/{{t}}.svg"/>
-      {% for comment in this.comments[t] %}
-        <p>{{comment}}</p>
-      {% endfor %} 
+      <div class="quad {{t}}">
+        <img src="/static/{{t}}.svg"/>
+        {% for comment in this.comments[t] %}
+          <p>{{comment}}</p>
+        {% endfor %} 
+      </div>
     {% endfor %} 
   </div>
 {%endblock%}
