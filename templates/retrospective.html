@@ -12,3 +12,9 @@
     {% endfor %} 
   </div>
 {%endblock%}
+{%block script%}
+  window.onload=function(){
+    var timeoutPeriod = 2000;
+    setTimeout("location.reload(true);",timeoutPeriod);
+  }
+{%endblock%}
