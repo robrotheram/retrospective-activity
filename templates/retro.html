@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Retrospective {{data.room}}</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <style type="text/css">
+        html, body{
+            background-color: #dbdee5;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 304 304' width='304' height='304'%3E%3Cpath fill='%232571a3' fill-opacity='0.4' d='M44.1 224a5 5 0 1 1 0 2H0v-2h44.1zm160 48a5 5 0 1 1 0 2H82v-2h122.1zm57.8-46a5 5 0 1 1 0-2H304v2h-42.1zm0 16a5 5 0 1 1 0-2H304v2h-42.1zm6.2-114a5 5 0 1 1 0 2h-86.2a5 5 0 1 1 0-2h86.2zm-256-48a5 5 0 1 1 0 2H0v-2h12.1zm185.8 34a5 5 0 1 1 0-2h86.2a5 5 0 1 1 0 2h-86.2zM258 12.1a5 5 0 1 1-2 0V0h2v12.1zm-64 208a5 5 0 1 1-2 0v-54.2a5 5 0 1 1 2 0v54.2zm48-198.2V80h62v2h-64V21.9a5 5 0 1 1 2 0zm16 16V64h46v2h-48V37.9a5 5 0 1 1 2 0zm-128 96V208h16v12.1a5 5 0 1 1-2 0V210h-16v-76.1a5 5 0 1 1 2 0zm-5.9-21.9a5 5 0 1 1 0 2H114v48H85.9a5 5 0 1 1 0-2H112v-48h12.1zm-6.2 130a5 5 0 1 1 0-2H176v-74.1a5 5 0 1 1 2 0V242h-60.1zm-16-64a5 5 0 1 1 0-2H114v48h10.1a5 5 0 1 1 0 2H112v-48h-10.1zM66 284.1a5 5 0 1 1-2 0V274H50v30h-2v-32h18v12.1zM236.1 176a5 5 0 1 1 0 2H226v94h48v32h-2v-30h-48v-98h12.1zm25.8-30a5 5 0 1 1 0-2H274v44.1a5 5 0 1 1-2 0V146h-10.1zm-64 96a5 5 0 1 1 0-2H208v-80h16v-14h-42.1a5 5 0 1 1 0-2H226v18h-16v80h-12.1zm86.2-210a5 5 0 1 1 0 2H272V0h2v32h10.1zM98 101.9V146H53.9a5 5 0 1 1 0-2H96v-42.1a5 5 0 1 1 2 0zM53.9 34a5 5 0 1 1 0-2H80V0h2v34H53.9zm60.1 3.9V66H82v64H69.9a5 5 0 1 1 0-2H80V64h32V37.9a5 5 0 1 1 2 0zM101.9 82a5 5 0 1 1 0-2H128V37.9a5 5 0 1 1 2 0V82h-28.1zm16-64a5 5 0 1 1 0-2H146v44.1a5 5 0 1 1-2 0V18h-26.1zm102.2 270a5 5 0 1 1 0 2H98v14h-2v-16h124.1zM242 149.9V160h16v34h-16v62h48v48h-2v-46h-48v-66h16v-30h-16v-12.1a5 5 0 1 1 2 0zM53.9 18a5 5 0 1 1 0-2H64V2H48V0h18v18H53.9zm112 32a5 5 0 1 1 0-2H192V0h50v2h-48v48h-28.1zm-48-48a5 5 0 0 1-9.8-2h2.07a3 3 0 1 0 5.66 0H178v34h-18V21.9a5 5 0 1 1 2 0V32h14V2h-58.1zm0 96a5 5 0 1 1 0-2H137l32-32h39V21.9a5 5 0 1 1 2 0V66h-40.17l-32 32H117.9zm28.1 90.1a5 5 0 1 1-2 0v-76.51L175.59 80H224V21.9a5 5 0 1 1 2 0V82h-49.59L146 112.41v75.69zm16 32a5 5 0 1 1-2 0v-99.51L184.59 96H300.1a5 5 0 0 1 3.9-3.9v2.07a3 3 0 0 0 0 5.66v2.07a5 5 0 0 1-3.9-3.9H185.41L162 121.41v98.69zm-144-64a5 5 0 1 1-2 0v-3.51l48-48V48h32V0h2v50H66v55.41l-48 48v2.69zM50 53.9v43.51l-48 48V208h26.1a5 5 0 1 1 0 2H0v-65.41l48-48V53.9a5 5 0 1 1 2 0zm-16 16V89.41l-34 34v-2.82l32-32V69.9a5 5 0 1 1 2 0zM12.1 32a5 5 0 1 1 0 2H9.41L0 43.41V40.6L8.59 32h3.51zm265.8 18a5 5 0 1 1 0-2h18.69l7.41-7.41v2.82L297.41 50H277.9zm-16 160a5 5 0 1 1 0-2H288v-71.41l16-16v2.82l-14 14V210h-28.1zm-208 32a5 5 0 1 1 0-2H64v-22.59L40.59 194H21.9a5 5 0 1 1 0-2H41.41L66 216.59V242H53.9zm150.2 14a5 5 0 1 1 0 2H96v-56.6L56.6 162H37.9a5 5 0 1 1 0-2h19.5L98 200.6V256h106.1zm-150.2 2a5 5 0 1 1 0-2H80v-46.59L48.59 178H21.9a5 5 0 1 1 0-2H49.41L82 208.59V258H53.9zM34 39.8v1.61L9.41 66H0v-2h8.59L32 40.59V0h2v39.8zM2 300.1a5 5 0 0 1 3.9 3.9H3.83A3 3 0 0 0 0 302.17V256h18v48h-2v-46H2v42.1zM34 241v63h-2v-62H0v-2h34v1zM17 18H0v-2h16V0h2v18h-1zm273-2h14v2h-16V0h2v16zm-32 273v15h-2v-14h-14v14h-2v-16h18v1zM0 92.1A5.02 5.02 0 0 1 6 97a5 5 0 0 1-6 4.9v-2.07a3 3 0 1 0 0-5.66V92.1zM80 272h2v32h-2v-32zm37.9 32h-2.07a3 3 0 0 0-5.66 0h-2.07a5 5 0 0 1 9.8 0zM5.9 0A5.02 5.02 0 0 1 0 5.9V3.83A3 3 0 0 0 3.83 0H5.9zm294.2 0h2.07A3 3 0 0 0 304 3.83V5.9a5 5 0 0 1-3.9-5.9zm3.9 300.1v2.07a3 3 0 0 0-1.83 1.83h-2.07a5 5 0 0 1 3.9-3.9zM97 100a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-48 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 96a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-144a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-96 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm96 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-32 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM49 36a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-32 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM33 68a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 240a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm80-176a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm112 176a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 180a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 84a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'%3E%3C/path%3E%3C/svg%3E");
+            height: 100%;
+        }
+        .vertical-offset-100{
+            padding-top:100px;
+        }
+
+        .container {
+            font-size: 0; /*fix inline gaps*/
+            height: 100%;
+        }
+        .item {
+            font-size: 16px; /*reset font size*/
+            display: inline-block;
+            vertical-align: top;
+            width: 50%;
+            height: 47%;
+            text-align: center;
+            vertical-align: middle;
+            position: relative;
+
+
+        }
+        .content {
+            position: absolute;
+            left: 0; right: 0; top: 0; bottom: 0; /*stretch and fill*/
+            overflow: auto; /*for scrollbar*/
+        }
+        .item:nth-child(1) { background: #CCFFCC; }
+        .item:nth-child(2) { background: #FFCCCC; }
+        .item:nth-child(3) { background: #CCCCFF; }
+        .item:nth-child(4) { background: #FFFFCC; }
+
+
+        .container-retro {
+            position: fixed;
+            top: 55px;
+            width: 100%;
+            max-width: 100%;
+            padding: 0px;
+            height: 100%;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+        }
+
+
+        .btn-circle {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+        }
+
+        .btn-top{
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        .card{
+            border-radius: 0px;
+            margin-bottom: 5px !important;
+            padding: 0px;
+        }
+
+        .item > img {
+            width: 200px;
+            height: 200px;
+            margin-top: 15%;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Retrospective</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">{{ data.room }} <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+
+    <div class="container container-retro">
+        <div class="item">
+            <img src="/static/good.svg"/>
+            <div class="content" id="good" style="padding: 5px;"></div>
+            <div class="btn-top">
+                <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target="#exampleModal" data-whatever="good" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/bad.svg"/>
+            <div class="content" id="bad" style="padding: 5px;"></div>
+            <div class="btn-top">
+                <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target="#exampleModal" data-whatever="bad" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/suggestion.svg"/>
+            <div class="content" id="suggestion" style="padding: 5px;"></div>
+            <div class="btn-top">
+                <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target="#exampleModal" data-whatever="suggestion" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <div class="item">
+            <img src="/static/thanks.svg"/>
+           <div class="content" id="thanks" style="padding: 5px;"></div>
+            <div class="btn-top">
+                <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target="#exampleModal" data-whatever="thanks" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+
+{% raw %}
+<script id="handlebars-demo" type="text/x-handlebars-template">
+    <div class="card border-secondary mb-3" style="margin-bottom: 0px" >
+        <div class="card-body text-secondary" style="padding: 0px">
+            <table class="table  table-sm" style="margin-bottom: 0px">
+                <tr>
+                    <td style="width: 50px">
+                         <form id={{id}} method="POST">
+                             {{#if vote_enabled}}
+                                <button  type="button" onclick="updatePoints('{{id}}', 1 )" id="Btnup" class="btn btn-success fa fa-thumbs-up" data-loading-text=" ... "></button>
+                             {{else}}
+                                <button  type="button" disabled class="btn btn-success fa fa-thumbs-up"></button>
+                             {{/if}}
+
+                             <p style="text-align: center; margin: 0">{{count}}</p>
+                             {{#if vote_enabled}}
+                                <button  type="button" onclick="updatePoints('{{id}}', -1 )" id="Btndown" class="btn btn-danger fa fa-thumbs-down" data-loading-text=" ... "></button>
+                             {{else}}
+                                <button  type="button" disabled class="btn btn-danger fa fa-thumbs-down"></button>
+                             {{/if}}
+                         </form>
+                    </td>
+                    <td style=" vertical-align:middle;">
+                        {{data}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+   </div>
+</script>
+{% endraw %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form id="postretrospective" method="POST">
+          <div class="modal-body">
+
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Comment Type</label>
+                <select name="type" class="form-control" id="retrospective-name">
+                    <option value="good">Good</option>
+                    <option value="bad">Bad</option>
+                    <option value="suggestion">Suggestion</option>
+                    <option value="thanks">Thanks</option>
+                  </select>
+
+               <!-- <input type="text" class="form-control" id="recipient-name">-->
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Message:</label>
+                <textarea class="form-control" rows="15" id="message-text" ></textarea>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary"/>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script>
+    var socket = {};
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      modal.find('.modal-body select').val(recipient)
+    })
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function update() {
+                for (var key in retrospective) {
+                    $("#"+key).html("");
+
+                    console.log(retrospective[key]);
+                    retrospective[key].sort(function(a, b){
+                        var keyA = a.value,
+                            keyB = b.value;
+                        // Compare the 2 dates
+                        if(keyA < keyB) return 1;
+                        if(keyA > keyB) return -1;
+                        return 0;
+                    });
+                    console.log(retrospective[key]);
+
+                    for (var j = 0; j < retrospective[key].length; j++){
+                        var data = retrospective[key][j];
+                        console.log(data);
+                        var vote = data.vote_enabled;
+                        if (vote==undefined){vote=true;}
+                        console.log(vote)
+                        var context = {"id" : data.id, "count" : data.value, "data" :  data.message, "vote_enabled":vote};
+                        var html = templateScript(context);
+                        $("#"+data.type).append(html);
+                    }
+                }
+            }
+    function find(id) {
+        for (var key in retrospective) {
+            var tmp =  $.grep(retrospective[key], function(e){ return e.id == id; });
+            if (tmp.length > 0) { return tmp}
+        }
+    }
+    function updatePoints(id , val) {
+        var result = find(id);
+        if (result.length != 0) {
+            result[0].value = result[0].value + val;
+            console.log(result);
+            socket.emit('retrospective_change', {room: room, data: result[0] });
+            result[0]["vote_enabled"] = false;
+            //update();
+        }
+    }
+
+
+</script>
+
+<script type="text/javascript" charset="utf-8">
+        var room =  "{{ data.room }}" ;
+        var template = $('#handlebars-demo').html();
+        var templateScript = Handlebars.compile(template);
+
+        var retrospective = {
+            "good":[],
+            "bad":[],
+            "thanks":[],
+            "suggestion":[]
+        };
+
+        $(document).ready(function() {
+
+            $.get({url: "data", success: function(result){
+                console.log(result);
+                for (i = 0; i < result.length; i++) {
+                    retrospective[result[i].type].push(result[i]);
+                }
+                console.log(retrospective)
+
+                update();
+
+            }});
+
+            // Use a "/test" namespace.
+            // An application can open a connection on multiple namespaces, and
+            // Socket.IO will multiplex all those connections on a single
+            // physical channel. If you don't care about multiple channels, you
+            // can set the namespace to an empty string.
+            namespace = '/test';
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+            // Event handler for new connections.
+            // The callback function is invoked when a connection with the
+            // server is established.
+            socket.on('connect', function() {
+                socket.emit('my_event', {data: 'I\'m connected!'});
+                 socket.emit('join', {room:room });
+
+
+            });
+            // Event handler for server sent data.
+            // The callback function is invoked whenever the server emits data
+            // to the client. The data is then displayed in the "Received"
+            // to the client. The data is then displayed in the "Received"
+            // section of the page.
+
+
+
+
+            socket.on('my_response', function(msg) {
+                console.log(msg.data);
+                if(msg.data.message != undefined){
+                    retrospective[msg.data.type].push(msg.data);
+                    update();
+                }
+            });
+
+            socket.on('my_response_update', function(msg) {
+                console.log("UPDATE", msg.data);
+                var result = find(msg.data.id);
+                if (result.length != 0) {
+                    result[0].value = msg.data.value;
+                    console.log(result);
+                    update();
+                }
+            });
+
+
+
+            // Interval function that tests message latency by sending a "ping"
+            // message. The server then responds with a "pong" message and the
+            // round trip time is measured.
+            var ping_pong_times = [];
+            var start_time;
+            window.setInterval(function() {
+                start_time = (new Date).getTime();
+                socket.emit('my_ping');
+            }, 1000);
+            // Handler for the "pong" message. When the pong is received, the
+            // time from the ping is stored, and the average of the last 30
+            // samples is average and displayed.
+            socket.on('my_pong', function() {
+                var latency = (new Date).getTime() - start_time;
+                ping_pong_times.push(latency);
+                ping_pong_times = ping_pong_times.slice(-30); // keep last 30 samples
+                var sum = 0;
+                for (var i = 0; i < ping_pong_times.length; i++)
+                    sum += ping_pong_times[i];
+                $('#ping-pong').text(Math.round(10 * sum / ping_pong_times.length) / 10);
+            });
+            // Handlers for the different forms in the page.
+            // These accept data from the user and send it to the server in a
+            // variety of ways
+            $('form#emit').submit(function(event) {
+                socket.emit('my_event', {data: $('#emit_data').val()});
+                return false;
+            });
+            $('form#broadcast').submit(function(event) {
+                socket.emit('my_broadcast_event', {data: $('#broadcast_data').val()});
+                return false;
+            });
+            $('form#join').submit(function(event) {
+                socket.emit('join', {room: $('#join_room').val()});
+                return false;
+            });
+            $('form#leave').submit(function(event) {
+                socket.emit('leave', {room: $('#leave_room').val()});
+                return false;
+            });
+            $('form#send_room').submit(function(event) {
+                socket.emit('my_room_event', {room: room, data: $('#room_data').val()});
+                return false;
+            });
+            $('form#close').submit(function(event) {
+                socket.emit('close_room', {room: $('#close_room').val()});
+                return false;
+            });
+            $('form#disconnect').submit(function(event) {
+                socket.emit('disconnect_request');
+                return false;
+            });
+
+
+            $('form#postretrospective').submit(function (event) {
+                var data = {
+                    "id" : uuidv4(),
+                    "value": 0,
+                    "type": $('#retrospective-name').val(),
+                    "message": $('textarea#message-text').val()
+                }
+                $('textarea#message-text').val("");
+
+                console.log("new",data)
+                socket.emit('my_room_event', {room: room, data: data });
+                $('#exampleModal').modal('toggle');
+                return false;
+            })
+        });
+    </script>
+    </body>
+</html>
